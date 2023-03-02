@@ -216,14 +216,17 @@ class _NovaVendaState extends State<NovaVenda> {
     _venda.total = _venda.total + item.total;
     //print("desconto item ${item.valorDesconto}");
     _venda.desconto = (_venda.desconto==null?0:_venda.desconto) + item.valorDesconto;
+
  //   _venda.total =  (_venda.total ==null?0:_venda.total) -  _venda.desconto; //atualiza desconto total
     //print("antes de arredondar:: ${_venda.total} - ${_venda.desconto} - ${item.valorDesconto}");
   //  _venda.total.toStringAsFixed(2); toPrecision(2);
     _venda.total = _venda.total.toPrecision(2);
     //_venda.desconto.toStringAsFixed(2);
-    _venda.desconto = _venda.desconto.toPrecision(2);
+    //_venda.desconto = _venda.desconto.toPrecision(2); //TODO verificar 02/03 - parece sobrando hehe
     //item.valorDesconto.toStringAsFixed(2);
     item.valorDesconto = item.valorDesconto.toPrecision(2);
+    _venda.descontoItens = item.valorDesconto.toPrecision(2); //TODO 02/03 - guardar desconto itens
+
     //print("arredondados:: ${_venda.total} - ${_venda.desconto} - ${item.valorDesconto}");
     setState(() {
       // _itens.add(item);
@@ -328,11 +331,11 @@ class _NovaVendaState extends State<NovaVenda> {
   //------------- finalizar venda ------------------
   _finalizaVenda(){
     setState(() {
-      print("====== setState - Finaliza venda"+_percentualController.text);
-      print("====== setState - Finaliza venda"+_venda.percentual.toString());
+      //print("====== setState - Finaliza venda"+_percentualController.text);
+      //print("====== setState - Finaliza venda"+_venda.percentual.toString());
       _habilita = true;
-      _venda.totalSemDesconto =  _venda.total;
-      print("====== setState - Finaliza venda:: "+_venda.totalSemDesconto.toString());
+      _venda.totalSemDesconto = (_venda.totalSemDesconto == null || _venda.totalSemDesconto ==0)? _venda.total : _venda.totalSemDesconto; //TODO retirei daqu
+      //print("====== setState - Finaliza venda:: "+_venda.totalSemDesconto.toString());
     });
      showDialog(context: context,
         builder: (context) {
@@ -352,17 +355,21 @@ class _NovaVendaState extends State<NovaVenda> {
                         prefixIcon: IconButton(
                           onPressed: (){
                             setState(() {
+                              _altStatus = true;
                             _percentualController.text = "";
                             _venda.isDescVenda = _isDescVenda;
-                           _venda.total =  _venda.totalSemDesconto;
+                            _venda.total =  _venda.totalSemDesconto;
                             if(_valorDesconto >0.0){
                               _venda.desconto= _venda.desconto - _valorDesconto;
+                              if(_venda.descontoItens != null && _venda.descontoItens >0){
+                                _venda.desconto= _venda.descontoItens;
+                              }
                             }//else{
                              // print("====>> ${_valorDesconto}");
                              // _venda.desconto=0;
                            // }
                             _isDescVenda =  false;
-                            _venda.isDescVenda = _isDescVenda;
+                            //_venda.isDescVenda = _isDescVenda;
 
                             _percentual = 0;
                             _venda.percentual = _percentual;
@@ -372,6 +379,7 @@ class _NovaVendaState extends State<NovaVenda> {
                             icon:Icon(Icons.clear,color: Colors.blue,)),
                         suffixIcon:IconButton(
                         onPressed: (){
+                          _altStatus = true;
                           if(_percentualController.text.length > 0){
                             _percentual = int.parse(_percentualController.text);
                            // print("entrou no if percuentual");
@@ -380,6 +388,9 @@ class _NovaVendaState extends State<NovaVenda> {
                             // _venda.totalSemDesconto = _venda.total;
                             //_venda.total = _venda.total - valorDesconto;
                             setState(() {
+                              if(_isEdit){
+                                _venda.total =  _venda.totalSemDesconto;
+                              }
                               _venda.total = _venda.total - _valorDesconto;
                               //TODO nao deixar somar descontos dos itens + desconto da venda
                               //_venda.desconto = _venda.desconto + _valorDesconto;

@@ -13,10 +13,10 @@ class HelperDAO {
   static final HelperDAO  _helper = HelperDAO._internal();
   static final LocalService _ls = new LocalService();
   Database _db;
-  final f = NumberFormat("###,###.00", "pt_BR");
+  final f = NumberFormat("###,##0.00", "pt_BR");
   final String TB_VENDAS = "CREATE TABLE vendas (id INTEGER PRIMARY KEY AUTOINCREMENT,codigo INTEGER, pagamento INTEGER, origem INTEGER, "
       "receberagora INTEGER, dinheiro REAL, troco REAL, registro TEXT, total REAL, "
-      "desconto REAL,percentual INTEGER, totalsemdesconto REAL, status INTEGER, clientecodigo INTEGER, clientenome TEXT, situacao INTEGER , login TEXT, isdescvenda INTEGER)";
+      "desconto REAL,descontoitens REAL,percentual INTEGER, totalsemdesconto REAL, status INTEGER, clientecodigo INTEGER, clientenome TEXT, situacao INTEGER , login TEXT, isdescvenda INTEGER)";
 
  final String TB_I_VENDAS = "CREATE TABLE itens (id INTEGER PRIMARY KEY, codigovenda INTEGER,codigoitem INTEGER, produtocodigo INTEGER, produtonome TEXT, quantidade REAL, "
       " granel INTEGER, pesogranel REAL, valorgranel REAL, desconto INTEGER, valordesconto REAL, totalparcial REAL, total REAL, status INTEGER, umv TEXT)";
@@ -143,7 +143,7 @@ class HelperDAO {
     var salesdb = await db;
     String login = await _ls.getUser();
 
-    String sql = "SELECT id, status, codigo, clientenome,receberagora, total, desconto,registro,origem,situacao,percentual FROM vendas WHERE status != 2 AND login = '${login}' ORDER BY registro desc"; //todas nao apagadas
+    String sql = "SELECT id, status, codigo, clientenome,receberagora, total, desconto,descontoitens,registro,origem,situacao,percentual,totalsemdesconto FROM vendas WHERE status != 2 AND login = '${login}' ORDER BY registro desc"; //todas nao apagadas
     List list = await salesdb.rawQuery(sql);
    await Future.forEach(list, (el) async {
     // print("venda selecionada: ${el}");
@@ -155,12 +155,15 @@ class HelperDAO {
       item.total = el["total"];
       item.registro = el["registro"];
       item.desconto = el["desconto"];
+      item.descontoItens = el["descontoitens"];
       item.receberAgora = el["receberagora"]== 0 ? true : false;
      item.origem = el["origem"];
      item.situacao = el["situacao"];
      //item.isDescVenda = el["isdescvenda"];
      item.percentual = el["percentual"]; //nao esta na lista da query
       //print("Receber agora:${el["receberagora"]}");
+
+      item.totalSemDesconto = el["totalsemdesconto"];
       String cabecalho = "";
       cabecalho = item.cliente==null?"Anônimo":item.cliente+" - R\$"+f.format(item.total);
       item.cabecalho = cabecalho;
@@ -199,7 +202,7 @@ class HelperDAO {
   getVenda(int codigoVenda) async{
 
     var salesdb = await db;
-    String sql = "SELECT id, status, codigo, clientenome,receberagora, total, dinheiro, desconto,troco, registro, origem, situacao,isdescvenda,percentual FROM vendas WHERE codigo = ${codigoVenda}";
+    String sql = "SELECT id, status, codigo, clientenome,receberagora, total, dinheiro, desconto,descontoitens,troco, registro, origem, situacao,isdescvenda,percentual,totalsemdesconto FROM vendas WHERE codigo = ${codigoVenda}";
     var venda = await salesdb.rawQuery(sql);
      // print("venda selecionada: ${venda}");
       Venda item = Venda();
@@ -210,6 +213,7 @@ class HelperDAO {
       item.total = venda[0]["total"];
       item.registro = venda[0]["registro"];
       item.desconto = venda[0]["desconto"];
+      item.descontoItens = venda[0]["descontoitens"];
       item.dinheiro = venda[0]["dinheiro"];
       item.troco = venda[0]["troco"];
       item.receberAgora = venda[0]["receberagora"]== 0 ? true : false;
@@ -217,6 +221,7 @@ class HelperDAO {
       item.situacao = venda[0]["situacao"];
       item.isDescVenda = venda[0]["isdescvenda"]== 0 ? true : false;
       item.percentual = venda[0]["percentual"];
+      item.totalSemDesconto = venda[0]["totalsemdesconto"];
       //print("Receber agora:${venda[0]["receberagora"]}");
       String cabecalho = "";
       cabecalho = item.cliente==null?"Anônimo":item.cliente+" - R\$"+f.format(item.total);
@@ -421,11 +426,11 @@ class HelperDAO {
     var salesdb = await db;
     int updateCount = 0;
     if(status == 1){ //tratar por status - 0-a receber 1-recebido 2-cancelado
-      updateCount = await salesdb.update("vendas", {"receberagora":0,"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":status,"total":v.total,"desconto":v.desconto,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
+      updateCount = await salesdb.update("vendas", {"receberagora":0,"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":status,"total":v.total,"totalSemDesconto":v.totalSemDesconto,"desconto":v.desconto,"descontoitens":v.descontoItens,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
     }else if(status == 2){ //apagada
       updateCount = await salesdb.update("vendas", {"status":status}, where: 'id = ?' , whereArgs: [v.id]);
     }else if(status == 99 || status == 0){ //status 99 - alterarVendaOff
-      updateCount = await salesdb.update("vendas", {"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":v.status,"total":v.total,"desconto":v.desconto,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
+      updateCount = await salesdb.update("vendas", {"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":v.status,"total":v.total,"totalsemdesconto":v.totalSemDesconto,"desconto":v.desconto,"descontoitens":v.descontoItens,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
     }
     //int updateCount = await salesdb.update("vendas", {"receberagora":0,"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco}, where: 'id = ?' , whereArgs: [v.id]);
     //print("atualizar status da venda - API - recebida: ${v.codigo} -  ${updateCount}");

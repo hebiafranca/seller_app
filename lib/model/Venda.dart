@@ -15,6 +15,7 @@ class Venda {
   String _registro;
   double _total;
   double _desconto;
+  double _descontoItens;
   double _totalSemDesconto;
   bool _isDescVenda;
   int _percentual;
@@ -39,6 +40,7 @@ class Venda {
       'registro': _registro,
       'total': _total,
       'desconto': _desconto==null?0.0:_desconto,
+      'descontoItens': _descontoItens==null?0.0:_descontoItens,
       'percentual':_percentual,
       'totalSemDesconto': _totalSemDesconto,
       'itens': itens,
@@ -53,12 +55,14 @@ class Venda {
       'pagamento':_pagamento ,
       'origem':_origem ,
      // 'receberAgora': _receberAgora==null?false:_receberAgora,
-      'receberAgora': _receberAgora==true?0:1,
+     // 'receberAgora': _receberAgora==true?0:1,
+      'receberagora': _receberAgora==true?0:1,
       'dinheiro':_dinheiro ,
       'troco': _troco,
       'registro': _registro,
       'total': _total,
       'desconto': _desconto==null?0.0:_desconto,
+      'descontoitens': _descontoItens==null?0.0:_descontoItens,
       'percentual': _percentual,
       'totalsemdesconto': _totalSemDesconto,
       //'status' : _status==true?0:1,
@@ -172,6 +176,12 @@ class Venda {
     _desconto = value;
   }
 
+  double get descontoItens => _descontoItens;
+
+  set descontoItens(double value) {
+    _descontoItens = value;
+  }
+
   double get total => _total;
 
   set total(double value) {
@@ -242,4 +252,6 @@ class Venda {
   set isDescVenda(bool value) {
     _isDescVenda = value;
   }
+
+
 }

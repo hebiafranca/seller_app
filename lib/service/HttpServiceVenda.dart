@@ -272,7 +272,7 @@ class HttpServiceVenda extends HttpServiceCRUD {
       //if(detalhes.length > ){
       // limparDescricao()}
       item.detalhes = detalhes;
-      print("Detalhes:: ${item.detalhes}");
+     // print("Detalhes:: ${item.detalhes}");
       item.itemV = its;
       lista.add(item);
     }
