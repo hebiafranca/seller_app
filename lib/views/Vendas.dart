@@ -253,7 +253,8 @@ class _VendasState extends State<Vendas> {
                               title:Transform.translate(
                                 offset: Offset(-35, -2),
                            //     child:  Text("${item.cliente==null?"Anônimo":limparNome(item.cliente)} - R\$\ ${f.format(item.total)} ${item.desconto==0?"":"( R\$"+f.format(item.desconto)+")"}",
-                                child:  Text("${item.cliente==null?"Anônimo":item.cliente} - R\$"+f.format(item.total)+" ${item.desconto==0?"":"(R\$"+f.format(item.desconto)+")"}",
+                                child:  Text("${item.cliente==null?"Anônimo":item.cliente} - R\$"+f.format(item.total)+" ${item.desconto==0?"":"(R\$"+f.format(item.desconto)}"
+                                    +"${item.percentual ==null || item.percentual ==0?")":" - "+item.percentual.toString()+"%)"}",
                                   //  title: Text("${item.cabecalho}",
                                   style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: Colors.black    ),
 

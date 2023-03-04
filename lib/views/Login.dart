@@ -263,7 +263,7 @@ class _LoginState extends State<Login> {
                         )
                     ),
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(5),
                     ),
 
                     BotaoCustomizado(

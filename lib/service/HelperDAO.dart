@@ -430,7 +430,7 @@ class HelperDAO {
     }else if(status == 2){ //apagada
       updateCount = await salesdb.update("vendas", {"status":status}, where: 'id = ?' , whereArgs: [v.id]);
     }else if(status == 99 || status == 0){ //status 99 - alterarVendaOff
-      updateCount = await salesdb.update("vendas", {"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":v.status,"total":v.total,"totalsemdesconto":v.totalSemDesconto,"desconto":v.desconto,"descontoitens":v.descontoItens,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
+      updateCount = await salesdb.update("vendas", {"receberagora":v.receberAgora==true?0:1,"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco,"status":v.status,"total":v.total,"totalsemdesconto":v.totalSemDesconto,"desconto":v.desconto,"descontoitens":v.descontoItens,"percentual":v.percentual}, where: 'id = ?' , whereArgs: [v.id]);
     }
     //int updateCount = await salesdb.update("vendas", {"receberagora":0,"pagamento":v.pagamento,"dinheiro":v.dinheiro,"troco":v.troco}, where: 'id = ?' , whereArgs: [v.id]);
     //print("atualizar status da venda - API - recebida: ${v.codigo} -  ${updateCount}");
@@ -472,6 +472,7 @@ class HelperDAO {
         }
       }
     //  print("nomeFormatado:"+nomeFormat);
+
       return nomeFormat;
     }else
       return nomeProduto;

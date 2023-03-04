@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 
 
 ThemeData _temaPadrao = ThemeData(
-    primaryColor: Color(0xff296fa7),
-    secondaryHeaderColor: Color(0xff20c997)
+    //primaryColor: Color(0xff296fa7),
+    //backgroundColor: Color(0xFF512DA8),
+    primarySwatch: Colors.deepPurple,
+    //scaffoldBackgroundColor: Color(0xFF512DA8),
+    //secondaryHeaderColor: Color(0xff20c997)
 );
 
 void main(){

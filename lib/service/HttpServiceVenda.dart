@@ -123,6 +123,13 @@ class HttpServiceVenda extends HttpServiceCRUD {
     }else {  //venda online
       item.origem = 1; //1-on 2 -off
       item.registro = null;
+      double valorVenda = item.total;
+      item.total =  valorVenda.toPrecision(2);
+      double valorDesconto = item.desconto;
+      item.desconto = valorDesconto.toPrecision(2);
+      double valorTotalSemDesconto = item.totalSemDesconto;
+      item.totalSemDesconto = valorTotalSemDesconto.toPrecision(2);
+
       var venda = item.toJson();
       var body = json.encode(venda);
      // print(body);

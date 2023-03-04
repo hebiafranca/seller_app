@@ -144,7 +144,7 @@ class HttpServiceSincroniza extends HttpServiceCRUD {
           valorDesconto = valor.toPrecision(2);
          // print("desconto arredondado:: ${valorDesconto}");
         }
-        print ("percentual ${el["percentual"]}");
+      //  print ("percentual ${el["percentual"]}");
         var body = json.encode(
             {
               //  "id":el["id"],
@@ -163,6 +163,7 @@ class HttpServiceSincroniza extends HttpServiceCRUD {
               "total": valorVenda,
             //  "desconto": el["desconto"],
               "desconto": valorDesconto,
+              "descontoItens": el["descontoitens"],
               "percentual": el["percentual"],
               "totalSemDesconto": el["totalsemdesconto"],
               "itens": itensM

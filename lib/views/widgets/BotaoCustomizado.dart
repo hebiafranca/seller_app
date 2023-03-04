@@ -17,7 +17,8 @@ class BotaoCustomizado extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
        // primary:Color(0xff5cb85c),
-        backgroundColor:Color(0xff5cb85c),
+       // backgroundColor:Color(0xff5cb85c),
+        backgroundColor:Color(0xFF512DA8),
         foregroundColor: Colors.white, // foreground
         //foregroundColor: Colors.white, // foreground
       ),

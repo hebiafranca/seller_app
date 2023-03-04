@@ -225,7 +225,8 @@ class _NovaVendaState extends State<NovaVenda> {
     //_venda.desconto = _venda.desconto.toPrecision(2); //TODO verificar 02/03 - parece sobrando hehe
     //item.valorDesconto.toStringAsFixed(2);
     item.valorDesconto = item.valorDesconto.toPrecision(2);
-    _venda.descontoItens = item.valorDesconto.toPrecision(2); //TODO 02/03 - guardar desconto itens
+    double totalDesc = _venda.descontoItens == null ?0: _venda.descontoItens;
+    _venda.descontoItens = totalDesc + item.valorDesconto.toPrecision(2); //TODO 02/03 - guardar desconto itens
 
     //print("arredondados:: ${_venda.total} - ${_venda.desconto} - ${item.valorDesconto}");
     setState(() {
@@ -361,13 +362,14 @@ class _NovaVendaState extends State<NovaVenda> {
                             _venda.total =  _venda.totalSemDesconto;
                             if(_valorDesconto >0.0){
                               _venda.desconto= _venda.desconto - _valorDesconto;
+                            }else{
+                             // print("====>> ${_valorDesconto}");
+                             // _venda.desconto=0;
                               if(_venda.descontoItens != null && _venda.descontoItens >0){
                                 _venda.desconto= _venda.descontoItens;
                               }
-                            }//else{
-                             // print("====>> ${_valorDesconto}");
-                             // _venda.desconto=0;
-                           // }
+
+                            }
                             _isDescVenda =  false;
                             //_venda.isDescVenda = _isDescVenda;
 
