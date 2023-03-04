@@ -29,8 +29,8 @@ final _storage = FlutterSecureStorage();
 //    return "http://192.168.200.129:8080/4seller-api/rest";
    // return "http://192.168.35.129:8080/4seller-api/rest";
     //return "http://192.168.0.165:8080/4seller-api/rest";
-   return "http://192.168.0.166:8080/4seller-api/rest";
-  //  return "https://www.4seller.openyx.com.br/${url}-api/rest";
+//   return "http://192.168.0.166:8080/4seller-api/rest";
+    return "https://www.4seller.openyx.com.br/${url}-api/rest";
  }
 
 _atualizarToken (String jwt) async{
