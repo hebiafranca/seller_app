@@ -127,8 +127,9 @@ _guardarUser (String username,String  password) async{
       return user;
     }
 
-    }on SocketException{
-      _mensagem = "Não foi possível realizar Login! Problemas com serviço de Autenticação. Tente mais tarde!";
+    }on SocketException catch(e){
+      _mensagem = "Não foi possível realizar Login! Problemas com serviço de Autenticação. Tente mais tarde! ${e.toString()}";
+      //_mensagem = e.toString();
       user.ok = false;
       user.mensagem = _mensagem;
       return user;
